@@ -207,6 +207,16 @@ function setup() {
     gradient.height = h;
     cursor.height = h;
 
+	// handler for the icons, mouseout
+	$('.paperIcon').mouseout( function() {
+			$(this).css("background-image", "url('img/paper-down.png')");
+		});
+
+	// handler for the icons, mouseover
+	$('.paperIcon').mouseenter( function() {
+			$(this).css('background-image', 'url(' + '"img/paper-up.png"' + ')');
+		});
+
     //hack for mouse status
     $(document).mousedown(function(e){
         // Left mouse button was pressed, set flag

@@ -90,3 +90,22 @@ body {
 	   height: 90px;
 	   width: 940px;
 }
+
+#facebookIcon {
+	   background-image:url('../img/paper-down.png');
+	   height: 80px;
+	   width: 80px;
+}
+
+#refreshIcon {
+	   background-image:url('../img/paper-down.png');
+	   height: 80px;
+	   width: 80px;
+}
+
+#iconContainer {
+	   position: absolute;
+	   z-index: 9;
+	   left: 900px;
+	   top: 140px;
+}
