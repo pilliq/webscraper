@@ -160,6 +160,8 @@ function gameMouseMove(evt) {
                 num_scraped++;
                 recentlyScraped = i;
 
+                if (!start_time) setup_timer();
+
                 play_sound();
                 redraw(middleground_ctx);
                 
@@ -255,7 +257,7 @@ function setup() {
     });
 
     // setup timer
-    setup_timer();
+    //setup_timer();
 };
 
 

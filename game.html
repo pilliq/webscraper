@@ -2,57 +2,57 @@
 
 <html>
 
-<head>
-<title>Webscraper</title>
+		<head>
+				<title>Webscraper</title>
 
-  <!-- CSS /-->
-  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-  <link href="css/webscraper.css" rel="stylesheet"/>
+				<!-- CSS /-->
+				<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+				<link href="css/webscraper.css" rel="stylesheet"/>
 
-  <!-- import JS files /-->
-  <script src="js/jquery.min.js" type="text/javascript"></script>
-  <script src="bootstrap/js/bootstrap.min.js"></script>
+				<!-- import JS files /-->
+				<script src="js/jquery.min.js" type="text/javascript"></script>
+				<script src="bootstrap/js/bootstrap.min.js"></script>
 
-  <!-- local JS files /-->
-  <script src="js/polygon.js" type="text/javascript"></script>
-  <script src="js/audio.js" type="text/javascript"></script>
-  <script src="js/win.js" type="text/javascript"></script>
-  <script src="js/timer.js" type="text/javascript"></script>
-  <script src="js/main.js" type="text/javascript"></script>
+				<!-- local JS files /-->
+				<script src="js/polygon.js" type="text/javascript"></script>
+				<script src="js/audio.js" type="text/javascript"></script>
+				<script src="js/win.js" type="text/javascript"></script>
+				<script src="js/timer.js" type="text/javascript"></script>
+				<script src="js/main.js" type="text/javascript"></script>
 
-</head>
+		</head>
 
-<body onload="setup();">
-  <div id="pageBackground">
+		<body onload="setup();">
+				<div id="pageBackground">
 
-	<div class="container" id="topContainer">
-	  <div id="spacer" style="height:110px;"></div>
-	  <div class="row">
-		<div class="span12">
-		  
-		  <div id="viewport" width="800">
-			<canvas class="canvas" id="background" height="600" width="800"></canvas>
-			<canvas class="canvas" id="middleground" height="600" width="800"></canvas>
-			<canvas class="canvas" id="foreground" height="600" width="800"></canvas>
-			<canvas class="canvas" id="gradient" height="600" width="800"></canvas>
-			<canvas class="canvas" id="cursor" height="600" width="800"></canvas>
-         </div>
-		  
-		</div>
-      </div>
+						<div class="container" id="topContainer">
+								<div id="spacer" style="height:110px;"></div>
+								<div class="row">
+										<div class="span12">
 
-	  <div id="tape1" class="frame"></div>
-	  <div id="tape2" class="frame"></div>
-	  <div id="tape3" class="frame"></div>
-      <div id="tape4" class="frame"></div>
+												<div id="viewport" width="800">
+														<canvas class="canvas" id="background" height="600" width="800"></canvas>
+														<canvas class="canvas" id="middleground" height="600" width="800"></canvas>
+														<canvas class="canvas" id="foreground" height="600" width="800"></canvas>
+														<canvas class="canvas" id="gradient" height="600" width="800"></canvas>
+														<canvas class="canvas" id="cursor" height="600" width="800"></canvas>
+												</div>
 
-    </div>
+										</div>
+								</div>
 
-    <div id="timer"></div>
-	
-  </div>
+								<div id="wintoast"><center>
+												<h1> WINNAR IS U</h1></br>
+												You scraped it in <strong><span id="yourTime"></span></strong>
+								</center></div>
+								<div id="tape1" class="frame"></div>
+								<div id="tape2" class="frame"></div>
+								<div id="tape3" class="frame"></div>
+								<div id="tape4" class="frame"></div>
 
-</body>
+						</div>
 
+						<div id="timer"></div></div>
 
+		</body>
 </html>
