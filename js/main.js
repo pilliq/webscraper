@@ -3,7 +3,7 @@
 var leftButtonDown = false;
 var recentlyScraped = -1;
 var recentlyIn = -1;
-
+var num_scraped = 0;
 
 var background_ctx;
 var middleground_ctx;
@@ -55,7 +55,7 @@ function gameMouseMove(evt) {
     function inPoly(x,y,p){
         return isPointInPoly(p.points, {x:x, y:y});
     }
-    console.log({"scraped": recentlyScraped, "in" : recentlyIn});
+    if (game_over) return;
     mX = evt.pageX - cvs_left;
     mY = evt.pageY - cvs_top;
     for (var i = 0; i < polygons.length; i++) {
@@ -64,9 +64,21 @@ function gameMouseMove(evt) {
                && !polygons[i].scraped && recentlyScraped == -1  ){
                 //scrape!!
                 polygons[i].scraped = true;
+                num_scraped++;
                 recentlyScraped = i;
+
                 play_sound();
                 redraw(middleground_ctx);
+                
+                // potential for additional scrapings
+                if (Math.random() < 0.1) {
+                    var plusone = crumble(polygons, i);
+                    console.log("ADDITIONAL SCRAPE INDEX: " + plusone);
+                    polygons[plusone].scraped = true;
+                    num_scraped++;
+                    redraw(middleground_ctx);
+                }
+
             }
             recentlyIn = i;
             //re-allow scrapes if we have left the recently scraped polygon
@@ -75,6 +87,8 @@ function gameMouseMove(evt) {
             }
         }
     }
+    if (num_scraped == polygons.length - 1) 
+        win(foreground_ctx, w, h, cvs_left, cvs_top);
 }
 
 // does initial setup
