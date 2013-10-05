@@ -312,7 +312,7 @@ function setup() {
 
     // load cursor image asset.
     imageObj = new Image();
-    imageObj.src = "img/scraper.png";
+    imageObj.src = "img/scraper3.png";
 
     // fill the gradient layer
     var grad = gradient_ctx.createRadialGradient(w/2, h/2, 180, w/2, h/2, h);
