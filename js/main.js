@@ -25,6 +25,19 @@ var requestAnimationFrame = window.requestAnimationFrame ||
                             window.webkitRequestAnimationFrame ||
                             window.msRequestAnimationFrame;
 var animq = []; // animation queue
+var mouseTrail = [{x: 0, y: 0}]; // history of mouse positions. don't append directly
+var numTrailEntries = 2; // number of entries to keep track of
+
+// add {x: ..., y: ...} coord to mouse history
+var addMouseHistory = function(point) {
+    if (mouseTrail.length >= 5) {
+        mouseTrail.shift();
+    }
+    mouseTrail.push(point);
+
+};
+
+
 
 // draw a polygon
 var drawPolygon = function(polygon, context) {
@@ -151,8 +164,9 @@ function gameMouseMove(evt) {
     }
 
     var update = function(polygon) { // updates position of polygon for animation
-        polygon.ctx.x += polygon.speed.x;
-        polygon.ctx.y += polygon.speed.y;
+        polygon.ctx.x += polygon.trajectory.x * polygon.speed.x;
+        polygon.ctx.y += polygon.trajectory.y * polygon.speed.y;
+        polygon.speed.y += (polygon.trajectory.y > 0) ? .2:-0.3;
         polygon.ctx.angle += polygon.angularSpeed;
         render(polygon);
     };
@@ -173,11 +187,18 @@ function gameMouseMove(evt) {
         }
     }
 
+    var calcCurrentTrajectory = function() {
+        var p1 = mouseTrail[mouseTrail.length-2];
+        var p2 = mouseTrail[mouseTrail.length-1];
+        return {x: p2.x-p1.x, y: p2.y-p1.y};
+    };
+
     var eject = function(polygon) { // push onto the queue for ejection
         var animpoly = clone(polygon);
-        animpoly.speed = {x: 0, y: 16 + Math.random() * 16}; //random speed
+        animpoly.speed = {x: 2 + Math.random() * .4, y: 2 + Math.random() * .4}; //random speed
         animpoly.angularSpeed = 0;
         animpoly.ctx = {x: 0, y: 0, angle: 0};
+        animpoly.trajectory = calcCurrentTrajectory();
         preRenderPolygon(animpoly);
         animq.push(animpoly);
         if (animq.length == 1) { // first one, start the animation!
@@ -188,6 +209,8 @@ function gameMouseMove(evt) {
     if (game_over) return;
     mX = evt.pageX - cvs_left;
     mY = evt.pageY - cvs_top;
+    addMouseHistory({x: mX, y: mY});
+
     for (var i = 0; i < polygons.length; i++) {
         if (inPoly(mX, mY, polygons[i])){
             if(leftButtonDown && recentlyIn != -1 && polygons[recentlyIn].scraped
@@ -204,7 +227,7 @@ function gameMouseMove(evt) {
                 redraw(middleground_ctx);
                 
                 // potential for additional scrapings
-                if (Math.random() < 0.15) {
+                if (Math.random() < 0.10) {
                     var plusone = crumble(i);
                     if (plusone != -1) {
                         polygons[plusone].scraped = true;
@@ -241,7 +264,6 @@ function setup() {
     var cursor = document.getElementById("cursor");
 
     fb_string = "";
-    update_fb_link();
     num_scraped = 0;
 
     cvs_left = $(background).offset().left;
