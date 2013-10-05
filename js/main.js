@@ -29,6 +29,35 @@ var erasePolygon = function(polygon, context) {
     context.fill()
 };
 
+//+ Jonas Raoni Soares Silva
+//@ http://jsfromhell.com/math/is-point-in-poly [rev. #0]
+function isPointInPoly(poly, pt){
+    for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
+        ((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y))
+        && (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x)
+        && (c = !c);
+    return c;
+}
+
+/* The main game "loop", called wheneverthe mouse is moved
+ */
+function gameMouseMove(evt) {
+
+		function inPoly(x,y,p){
+				return isPointInPoly(p.points, {x:x, y:y});
+		}
+
+		mX = evt.pageX - cvs_left;
+		mY = evt.pageY - cvs_top;
+		console.log([mX,mY]);
+		for (var i = 0; i < polygons.length; i++) {
+				if(!polygons[i].scraped && inPoly(mX, mY, polygons[i])){
+						polygons[i].scraped = true;
+						redraw(middleground_ctx);
+				}
+		}
+}
+
 /* Given the number of squares to make and the with and height of the container
    generates a list of polygons according to polygon spec
  */
@@ -67,10 +96,10 @@ function setup() {
 		cvs_top = $(background).offset().top;
 
 		// make canvas full height of page
-	    h = document.height;
+		h = document.height;
 		w = background.width;
 		background.height = h;
-		middleground.height = h;
+		middleground.height= h;
 		foreground.height = h;
 		gradient.height = h;
 		cursor.height = h;
@@ -98,10 +127,30 @@ function setup() {
 		// set cursor, teehee
 		$('#cursor').mousemove( function(e) {
 				drawScraper(e);
+	      gameMouseMove(e);
 			});
-
-		
 };
+
+
+/* Draws one polygon
+ */
+function drawOne(p,ctx) {
+	console.log(ctx);
+		//console.log(rect);
+		if (!p.scraped) {
+				drawPolygon(p, ctx);
+				ctx.fill();
+		}
+}
+
+/* redraw entire buffer, commiting changes
+ */
+function redraw(ctx) {
+		ctx.clearRect(0,0,w,h);
+		for (var i = 0; i < polygons.length; i++) {
+				drawOne(polygons[i], ctx);
+		}
+}
 
 function drawScraper(e) {
 	cursor_ctx.clearRect(0, 0, w, h);
@@ -115,19 +164,17 @@ function drawScraper(e) {
 
 function fillMiddleground(ctx) {
 	var imageObj = new Image();
+
+	console.log(ctx);
 	
 	imageObj.onload = function() {
-        //ctx.drawImage(imageObj, 0, 0);
+    //ctx.drawImage(imageObj, 0, 0);
 		var pattern = ctx.createPattern(imageObj, "repeat");
 		ctx.fillStyle = pattern;
-		
-		// fill all the polygons!
-		for (var i = 0; i < polygons.length; i++) {
-			drawPolygon(polygons[i], ctx);
-			ctx.fill();
-		}
+		redraw(ctx);
 	};
 	imageObj.src = "http://farm4.staticflickr.com/3333/3333171389_35b840e742_o.jpg";
 	//imageObj.src = "http://farm3.staticflickr.com/2176/2394924890_02a6b830a7_b.jpg";
+
 
 };

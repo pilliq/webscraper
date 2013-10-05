@@ -68,7 +68,7 @@ function crackle(polygon, reps) {
 			poly_pts.push(points[i]);
 		}
 		poly["points"] = poly_pts;
-		poly["alive"] = true;
+		poly["scraped"] = false;
 		polygons.push(poly);
 
 		// draw here for testing
