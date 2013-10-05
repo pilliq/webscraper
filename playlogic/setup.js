@@ -23,9 +23,9 @@ var squares = function(numSquares, rows, width, height) {
         points.push({x: ((i%sperrow + 1)*squarew), y: whichrow*squareh}); // top right
         points.push({x: ((i%sperrow + 1)*squarew), y: (whichrow+1)*squareh});// bottom right
         points.push({x: (i%sperrow) * squarew, y: (whichrow+1)*squareh}); // bottom left
-        points.push({x: (i%sperrow) * squarew, y: whichrow*squareh}); // top left 
+        //points.push({x: (i%sperrow) * squarew, y: whichrow*squareh}); // top left 
 
-        polygons.push({points: points});
+        polygons.push(new Polygon(points));
     }
 
     console.log(polygons);
@@ -86,7 +86,7 @@ function horribleCollision(evt) {
 		mY = evt.pageY - cvs_t;
 		console.log([mX,mY]);
 		for (var i = 0; i < polys.length; i++) {
-				if(inPoly(mX, mY, polys[i])){
+				if(polys[i].alive && inPoly(mX, mY, polys[i])){
 						polys[i].alive = false;
 				}
 		}
@@ -103,15 +103,7 @@ function load_page() {
 	cvs_l = $(cvs).offset().left;
 	cvs_t = $(cvs).offset().top;
 	console.log(cvs_t);
-	polys = [new Polygon(
-						[{x:10, y:10},
-						 {x:400, y:20},
-						 {x:200,y:200},
-						 {x:250,y:400},
-						 {x:50, y:12}
-						 ]) 
-					];
-
+	polys = squares(20, 5, 800, 600);
 	$(cvs).mousemove(horribleCollision);
 
 	redraw();
