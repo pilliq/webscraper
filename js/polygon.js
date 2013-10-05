@@ -68,11 +68,11 @@ function crackle(polygon, reps) {
 			poly_pts.push(points[i]);
 		}
 		poly["points"] = poly_pts;
+		poly["alive"] = true;
 		polygons.push(poly);
 
 		// draw here for testing
-		//drawPoly(poly);
-
+		//	drawPoly(poly);
 		return;
 	}
 
