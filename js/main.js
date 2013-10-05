@@ -229,6 +229,7 @@ function gameMouseMove(evt) {
 
 // does initial setup
 function setup() {
+    game_over = false;
 
     var background = document.getElementById("background");
     var middleground_shadow = document.getElementById("middleground-shadow");
