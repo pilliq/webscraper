@@ -164,11 +164,11 @@ function gameMouseMove(evt) {
                 redraw(middleground_ctx);
                 
                 // potential for additional scrapings
-                if (Math.random() < 0.5) {
+                if (Math.random() < 0.2) {
                     var plusone = crumble(i);
                     if (plusone != -1) {
                         polygons[plusone].scraped = true;
-                        eject(polygons[i]); // start animation for this polygon
+                        eject(polygons[plusone]); // start animation for this polygon
                         num_scraped++;
                         redraw(middleground_ctx);
                     }
