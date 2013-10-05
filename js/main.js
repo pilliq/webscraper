@@ -166,6 +166,7 @@ function gameMouseMove(evt) {
     var update = function(polygon) { // updates position of polygon for animation
         polygon.ctx.x += polygon.trajectory.x * polygon.speed.x;
         polygon.ctx.y += polygon.trajectory.y * polygon.speed.y;
+        polygon.speed.y += (polygon.trajectory.y > 0) ? .1:-0.3;
         polygon.ctx.angle += polygon.angularSpeed;
         render(polygon);
     };
@@ -194,7 +195,7 @@ function gameMouseMove(evt) {
 
     var eject = function(polygon) { // push onto the queue for ejection
         var animpoly = clone(polygon);
-        animpoly.speed = {x: 16 + Math.random() * 16, y: 16 + Math.random() * 16}; //random speed
+        animpoly.speed = {x: 2 + Math.random() * .5, y: 2 + Math.random() * .5}; //random speed
         animpoly.angularSpeed = 0;
         animpoly.ctx = {x: 0, y: 0, angle: 0};
         animpoly.trajectory = calcCurrentTrajectory();
