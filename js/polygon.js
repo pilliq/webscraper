@@ -11,7 +11,7 @@ function drawPoly(polygon) {
 	var r = Math.floor(Math.random()*255);
 	var g = Math.floor(Math.random()*255);
 	var b = Math.floor(Math.random()*255);
-	ctx.lineWidth = 5;
+	ctx.lineWidth = 3;
 	ctx.strokeStyle = 'rgba('+r+','+g+','+b+', 0.9)';
 	ctx.beginPath();
 	ctx.moveTo(points[0]["x"], points[0]["y"]);
@@ -32,27 +32,27 @@ function testPolygons() {
 	var h = 400;
 
 	// bottom points
-	for (var i = 0; i < w; i += 10) {
+	for (var i = 0; i < w; i += 50) {
 		pts.push({"x" : i, "y" : 0});
 	}
 
 	// right side points
-	for (var i = 0; i < h; i += 10) {
+	for (var i = 0; i < h; i += 50) {
 		pts.push({"x" : w, "y" : i});
 	}
 
 	// top points
-	for (var i = w; i > 0; i -= 10) {
+	for (var i = w; i > 0; i -= 50) {
 		pts.push({"x" : i, "y" : h});
 	}
 
 	// left side points
-	for (var i = h; i > 0; i -= 10) {
+	for (var i = h; i > 0; i -= 50) {
 		pts.push({"x" : 0, "y" : i});
 	}
-
+	polygons = [];
 	poly["points"] = pts;
-	crackle(poly, 4); 
+	crackle(poly, 6); 
 }
 
 // takes an array of coordinates, representing a polygon
@@ -86,6 +86,22 @@ function crackle(polygon, reps) {
 	var n = points.length;
 	var mid = Math.floor(n/2);
 
+	// are these two points in line with each other?
+	// if so, change mid
+	var around = false;
+	while (points[mid]["x"] == points[0]["x"] || 
+		   points[mid]["y"] == points[0]["y"]) {
+		mid++;
+		if (mid >= points.length) {
+			if (around) {
+				console.log("cannot parse a line.");
+				return; 
+			}
+			around = true;
+			mid = 0;
+		}
+	}
+
 	// divide into two "halves"
 	// both polygons get first and mid point
 	var poly1_pts = points.slice(0, mid + 1);
@@ -93,7 +109,7 @@ function crackle(polygon, reps) {
 	poly2_pts.push(points[0]); // add first pt
 
 	// generate a crooked line between dividing points
-	var crookedPoints = crookedLine(points[0], points[mid]);
+	var crookedPoints = crookedLine(points[0], points[mid], polygon);
 	console.log(crookedPoints.length);
 	poly2_pts = poly2_pts.concat(crookedPoints);
 	crookedPoints.reverse();
@@ -119,12 +135,12 @@ function crackle(polygon, reps) {
 
 // generate a crooked, segmented line from pt1 to pt2
 // return an array of points 
-function crookedLine(pt1, pt2) {
+function crookedLine(pt1, pt2, poly) {
 	var x1 = pt1["x"];
 	var y1 = pt1["y"];
 	var x2 = pt2["x"];
 	var y2 = pt2["y"];
-	var dev = 50; // deviation from center line
+	var dev = 20; // deviation from center line
 
 	var Delta_x = Math.abs(x2 - x1);
 	var Delta_y = Math.abs(y2 - y1);
@@ -157,6 +173,13 @@ function crookedLine(pt1, pt2) {
 		var new_pt = {};
 		new_pt["x"] = new_x;
 		new_pt["y"] = new_y;
+
+		// if this new point is outside parent polygon, 
+		// just store the prime point
+		if (!isPointInPoly(poly["points"], new_pt)) {
+			new_pt["x"] = x_prime;
+			new_pt["y"] = y_prime;
+		}
 		crookedPoints.push(new_pt);
 	}
 	console.log("crooked points:");
@@ -164,9 +187,23 @@ function crookedLine(pt1, pt2) {
 	return crookedPoints;
 };
 
+//+ Jonas Raoni Soares Silva
+//@ http://jsfromhell.com/math/is-point-in-poly [rev. #0]
+function isPointInPoly(poly, pt){
+    for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
+        ((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y))
+        && (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x)
+        && (c = !c);
+    return c;
+};
+
 function cycleArray(array) {
 	new_array = [];
-	var n = Math.floor(Math.random()*array.length);
+	var l = array.length;
+	var n = Math.floor(Math.random()*20);
+	if (n >= l) return array;
+	//var n = Math.floor(l/2);
+	//var n = Math.floor(l/2) + Math.floor(Math.random()*3);
 
 	for (var i = n; i < array.length; i++) {
 		new_array.push(array[i]);
