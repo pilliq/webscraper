@@ -218,6 +218,7 @@ function setup() {
 
 	// handler for the icons, mouseover
 	$('.paperIcon').mouseenter( function() {
+            scrape4.play();
 			$(this).css('background-image', 'url(' + '"img/paper-up.png"' + ')');
 		});
 
