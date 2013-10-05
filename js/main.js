@@ -387,7 +387,8 @@ function fillMiddleground(ctx) {
                           "img/paint/paint5.jpg", "img/paint/paint6.jpg",
                           "img/paint/paint7.jpg", "img/paint/paint8.jpg",
 						  "img/paint/paint9.jpg", "img/paint/paint10.jpg",
-						  "img/paint/paint11.jpg", "img/paint/paint12.jpg"]
+						  "img/paint/paint11.jpg", "img/paint/paint12.jpg",
+						  "img/paint/paint13.jpg"]
     imageObj.src = wallpaint_imgs[Math.floor((Math.random()*wallpaint_imgs.length))];
 };
 
