@@ -7,7 +7,7 @@ function setup_timer() {
 
 function update_timer() {
     document.getElementById('timer').textContent = format_time();
-    if (!game_over) var t = setTimeout(update_timer, 10);
+    if (!game_over) var t = setTimeout(update_timer, 1000);
 }
 
 function format_time() {
