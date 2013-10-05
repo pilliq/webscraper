@@ -1,8 +1,10 @@
 // some global variables, for ease
 
 var leftButtonDown = false;
-var recentlyScraped = false;
-var wasInScrapedSpace = false;
+var recentlyScraped = -1;
+var recentlyIn = -1;
+
+
 var background_ctx;
 var middleground_ctx;
 var foreground_ctx;
@@ -43,50 +45,37 @@ function isPointInPoly(poly, pt){
     return c;
 }
 
+function allowScrapes() {
+    recentlyScraped = -1;
+}
+
 /* The main game "loop", called wheneverthe mouse is moved
 */
 function gameMouseMove(evt) {
     function inPoly(x,y,p){
         return isPointInPoly(p.points, {x:x, y:y});
     }
-
+    console.log({"scraped": recentlyScraped, "in" : recentlyIn});
     mX = evt.pageX - cvs_left;
     mY = evt.pageY - cvs_top;
     for (var i = 0; i < polygons.length; i++) {
-        if(leftButtonDown && !recentlyScraped && 
-           !polygons[i].scraped && inPoly(mX, mY, polygons[i])){
-               polygons[i].scraped = true;
-               redraw(middleground_ctx);
-               recentlyScraped = true;
-               play_sound();
+        if (inPoly(mX, mY, polygons[i])){
+            if(leftButtonDown && polygons[recentlyIn].scraped
+               && !polygons[i].scraped && recentlyScraped == -1  ){
+                //scrape!!
+                polygons[i].scraped = true;
+                recentlyScraped = i;
+                play_sound();
+                redraw(middleground_ctx);
+            }
+            recentlyIn = i;
+            //re-allow scrapes if we have left the recently scraped polygon
+            if (recentlyScraped != -1 && recentlyIn != recentlyScraped){
+                allowScrapes();
+            }
         }
     }
 }
-
-/* Given the number of squares to make and the with and height of the container
-   generates a list of polygons according to polygon spec
-   */
-var squares = function(numSquares, rows, width, height) {
-    var sperrow = Math.ceil(numSquares / rows); // 6 squares per row
-    var squarew = width / sperrow; // 116.66667 
-    var squareh = height / rows; // 31.25
-
-    polygons = [];
-    for (var i = 0; i < numSquares; i++) {
-        var points = [];
-        var whichrow = (i - i%sperrow) / sperrow;
-        points.push({x: (i%sperrow) * squarew, y: whichrow*squareh}); // top left 
-        points.push({x: ((i%sperrow + 1)*squarew), y: whichrow*squareh}); // top right
-        points.push({x: ((i%sperrow + 1)*squarew), y: (whichrow+1)*squareh});// bottom right
-        points.push({x: (i%sperrow) * squarew, y: (whichrow+1)*squareh}); // bottom left
-        points.push({x: (i%sperrow) * squarew, y: whichrow*squareh}); // top left 
-
-        polygons.push({points: points});
-    }
-
-    console.log(polygons);
-    return polygons;
-};
 
 // does initial setup
 function setup() {
@@ -118,7 +107,7 @@ function setup() {
         // Left mouse button was released, clear flag
         if(e.which === 1){
             leftButtonDown = false;
-            recentlyScraped = false;
+            allowScrapes();
         }
     });
 
@@ -145,6 +134,9 @@ function setup() {
 
     // fill the middleground, with polygons
     fillMiddleground(middleground_ctx);
+    
+    //remove random piece
+    polygons[Math.floor(Math.random() * polygons.length)].scraped = true;
 
     // set cursor
     $('#cursor').mousemove( function(e) {
