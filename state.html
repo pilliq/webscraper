@@ -1,0 +1,90 @@
+<html>
+    <head>
+        <style type="text/css">
+            #viewport {
+                position: relative;
+            }
+            canvas {
+                background-color: transparent;
+            }
+            .canvas {
+                position: absolute;
+            }
+            #background {
+                z-index: 2;
+                background-color: black;
+            }
+            #middleground {
+                z-index: 3;
+            }
+            #foreground {
+                z-index: 4;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="viewport">
+            <canvas class="canvas" id="background" height="500" width="700"></canvas>
+            <canvas class="canvas" id="middleground" height="500" width="700"></canvas>
+            <canvas class="canvas" id="foreground" height="500" width="700"></canvas>
+        </div>
+    </body>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript">
+        var drawPolygon = function(polygon, context) {
+            context.beginPath();
+
+            context.moveTo(
+            c2.fillStyle = '#f00';
+            c2.beginPath();
+            c2.moveTo(0, 0);
+            c2.lineTo(100,50);
+            c2.lineTo(50, 100);
+            c2.lineTo(0, 90);
+            c2.closePath();
+            c2.fill();
+        };
+
+        var drawPolygons = function(polygons) {
+
+        };
+
+        /* Given the number of squares to make and the with and height of the container
+           generates a list of polygons according to polygon spec
+         */
+        var squares = function(numSquares, width, height) {
+            var ratio = (width > height) ? width / height : height / width;
+            var rows = Math.floor(ratio);
+            var sperrow = numSquares / rows;
+            var squarew = width / sperrow;
+            var squareh = height / rows;
+            
+            polygons = [];
+            for (var i = 0; i < numSquares; i++) {
+                var points = [];
+                points.push({x: i * squarew, y: i % sperrow}); // top left 
+                points.push({x: (i*squarew)+squarew, y: i % sperrow}); // top right
+                points.push({x: (i*squarew)+squarew, y: i % sperrow}); // bottom right
+                points.push({x: i* squarew, y: (i%sperrow)+squareh}); // bottom left
+
+                polygons.push({points: points});
+            }
+
+            return polygons;
+        };
+
+        $(document).ready(function() {
+            var background = document.getElementById("background").getContext("2d");
+            var middleground = document.getElementById("middleground").getContext("2d");
+            middleground.fillStyle = "#FF0000";
+            middleground.fillRect(10, 10, 150, 180);
+            var cvs = document.getElementById("background"),
+                ctx = cvs.getContext("2d"),
+                w = cvs.width,
+                h = cvs.height;
+
+            var polygons = squares(16, 700, 500);
+            console.log(polygons);
+        });
+    </script>
+</html>
