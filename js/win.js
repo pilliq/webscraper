@@ -3,10 +3,9 @@ var game_over;
 function win(ctx, cvs_w, cvs_h, cvs_left, cvs_top) {
     console.log("WINNER");
     game_over = true;    
-    var box_w = 500;
+    var box_w = 450;
     var box_h = 200;
-    roundedRect(ctx, (cvs_left + cvs_w/2 - box_w/2), (cvs_top + cvs_h/2 - box_h/2),
-                box_w, box_h, 25);
+    roundedRect(ctx, (cvs_left-50), (cvs_top+50), box_w, box_h, 30);
 }
 
 // from mozilla developer tutorial "drawing shapes with canvas"
