@@ -5,44 +5,89 @@ var cvs_w;
 var cvs_h;
 var cvs_l;
 var cvs_t;
-var rects;
+var polys;
 
+/* Given the number of squares to make and the with and height of the container
+   generates a list of polygons according to polygon spec
+ */
+var squares = function(numSquares, rows, width, height) {
+    var sperrow = Math.ceil(numSquares / rows); // 6 squares per row
+    var squarew = width / sperrow; // 116.66667 
+    var squareh = height / rows; // 31.25
+    
+    polygons = [];
+    for (var i = 0; i < numSquares; i++) {
+        var points = [];
+        var whichrow = (i - i%sperrow) / sperrow;
+        points.push({x: (i%sperrow) * squarew, y: whichrow*squareh}); // top left 
+        points.push({x: ((i%sperrow + 1)*squarew), y: whichrow*squareh}); // top right
+        points.push({x: ((i%sperrow + 1)*squarew), y: (whichrow+1)*squareh});// bottom right
+        points.push({x: (i%sperrow) * squarew, y: (whichrow+1)*squareh}); // bottom left
+        points.push({x: (i%sperrow) * squarew, y: whichrow*squareh}); // top left 
 
-function Rectangle(x1,y1,x2,y2){
-		this.x1 = x1;
-		this.y1 = y1;
-		this.x2 = x2;
-		this.y2 = y2;
+        polygons.push({points: points});
+    }
+
+    console.log(polygons);
+    return polygons;
+};
+
+function Polygon(pointList) {
 		this.alive = true;
+		this.points = pointList;
 }
 
-function drawRect(rect) {
+var drawPolygon = function(polygon, context) {
+		context.beginPath();
+
+		console.log(polygon.points);
+
+    context.moveTo(polygon.points[0].x, polygon.points[0].y);
+    for (var i = 1; i < polygon.points.length; i++) {
+        context.lineTo(polygon.points[i].x, polygon.points[i].y);
+    }
+    context.closePath();
+};
+
+function drawOne(p) {
 		ctx.fillStyle="#FF0000";
-		console.log(rect);
-		if (rect.alive) {
-				ctx.fillRect(rect.x1, rect.y1, rect.x2-rect.x1, rect.y2-rect.y1);
+		//console.log(rect);
+		if (p.alive) {
+				drawPolygon(p, ctx);
+				ctx.fill();
 		}
 }
 
 function redraw() {
 		ctx.clearRect(0,0,cvs_w,cvs_h);
-		for (var i = 0; i < rects.length; i++) {
-				drawRect(rects[i]);
+		for (var i = 0; i < polys.length; i++) {
+				drawOne(polys[i]);
 		}
+}
+
+//+ Jonas Raoni Soares Silva
+//@ http://jsfromhell.com/math/is-point-in-poly [rev. #0]
+
+function isPointInPoly(poly, pt){
+    for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
+        ((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y))
+        && (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x)
+        && (c = !c);
+    return c;
 }
 
 function horribleCollision(evt) {
 
-		function inRect(x,y,rect){
-				return ((x <= rect.x2 && x >= rect.x1) && (y >= rect.y1 && y <= rect.y2))
+		function inPoly(x,y,rect){
+				return isPointInPoly(rect.points, {x:x, y:y});
 		}
 
 		mX = evt.pageX - cvs_l;
 		mY = evt.pageY - cvs_t;
 		console.log([mX,mY]);
-		for (var i = 0; i < rects.length; i++) {
-				if(inRect(mX, mY, rects[i])){
-						rects[i].alive = false;
+		for (var i = 0; i < polys.length; i++) {
+				if(inPoly(mX, mY, polys[i])){
+						polys[i].alive = false;
 				}
 		}
 		redraw();
@@ -58,10 +103,14 @@ function load_page() {
 	cvs_l = $(cvs).offset().left;
 	cvs_t = $(cvs).offset().top;
 	console.log(cvs_t);
-	rects = [new Rectangle(0,0,25,25),
-				   new Rectangle(500,400,700,550)];
-  
-	ctx.fillStyle="#FF0000";
+	polys = [new Polygon(
+						[{x:10, y:10},
+						 {x:400, y:20},
+						 {x:200,y:200},
+						 {x:250,y:400},
+						 {x:50, y:12}
+						 ]) 
+					];
 
 	$(cvs).mousemove(horribleCollision);
 
