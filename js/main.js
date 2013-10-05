@@ -27,6 +27,7 @@ var requestAnimationFrame = window.requestAnimationFrame ||
 var animq = []; // animation queue
 var mouseTrail = [{x: 0, y: 0}]; // history of mouse positions. don't append directly
 var numTrailEntries = 2; // number of entries to keep track of
+var starsRender;
 
 // add {x: ..., y: ...} coord to mouse history
 var addMouseHistory = function(point) {
@@ -127,6 +128,15 @@ var offCanvas = function(polygon) {
     return false;
 };
 
+/* Returns true if polygon.ctx.scalex and polygon.ctx.scaley is 100% or greater
+ */
+var fullSize = function(polygon) {
+    if (polygon.ctx.scalex >= 1 && polygon.ctx.scaley >= 1) {
+        return true;
+    }
+    return false;
+};
+
 /* The main game "loop", called wheneverthe mouse is moved
 */
 function gameMouseMove(evt) {
@@ -159,10 +169,11 @@ function gameMouseMove(evt) {
         foreground_ctx.save();
             foreground_ctx.translate(polygon.ctx.x, polygon.ctx.y);
             foreground_ctx.rotate(polygon.ctx.angle);
+            foreground_ctx.scale(polygon.ctx.scalex, polygon.ctx.scaley);
             foreground_ctx.drawImage(polygon.cachedRender, 0, 0);
         foreground_ctx.restore();
     }
-
+    
     var update = function(polygon) { // updates position of polygon for animation
         polygon.ctx.x += polygon.trajectory.x * polygon.speed.x;
         polygon.ctx.y += polygon.trajectory.y * polygon.speed.y;
@@ -171,15 +182,28 @@ function gameMouseMove(evt) {
         render(polygon);
     };
 
+    var updateImage = function(polygon) { // used to update scale of starsRender
+        polygon.ctx.scalex += 0.1;
+        polygon.ctx.scaley += 0.1;
+        render(polygon);
+    };
+
     var draw = function() {
         foreground_ctx.clearRect(0, 0, w, h);
         for (var i = 0; i < animq.length; i++) {
-            update(animq[i]);
-            if (offCanvas(animq[i])) {
-                var deletedPolygon = animq.splice(i,1)[0]; 
-                $(deletedPolygon.cachedRender).remove();
-                i--;
-            } 
+            if (animq[i].image) {
+                updateImage(animq[i]);
+                if (fullSize(animq[i])) {
+                    animq.splice(i,1);
+                }
+            } else {
+                update(animq[i]);
+                if (offCanvas(animq[i])) {
+                    var deletedPolygon = animq.splice(i,1)[0]; 
+                    $(deletedPolygon.cachedRender).remove();
+                    i--;
+                } 
+            }
         }
 
         if (animq.length != 0) {
@@ -193,13 +217,23 @@ function gameMouseMove(evt) {
         return {x: p2.x-p1.x, y: p2.y-p1.y};
     };
 
-    var eject = function(polygon) { // push onto the queue for ejection
-        var animpoly = clone(polygon);
-        animpoly.speed = {x: 2 + Math.random() * .4, y: 2 + Math.random() * .4}; //random speed
-        animpoly.angularSpeed = 0;
-        animpoly.ctx = {x: 0, y: 0, angle: 0};
-        animpoly.trajectory = calcCurrentTrajectory();
-        preRenderPolygon(animpoly);
+    var eject = function(polygon) { // push onto the queue for animating
+        var animpoly;
+        if (polygon.image) {
+            polygon.ctx.scalex = 0;
+            polygon.ctx.scaley = 0;
+            polygon.ctx.angle = 0;
+            polygon.ctx.angularSpeed = 0;
+            animpoly = polygon;
+        } else {
+            animpoly = clone(polygon);
+            animpoly.image = false;
+            animpoly.speed = {x: 2 + Math.random() * .4, y: 2 + Math.random() * .4}; //random speed
+            animpoly.angularSpeed = 0;
+            animpoly.ctx = {x: 0, y: 0, angle: 0, scalex: 1, scaley: 1};
+            animpoly.trajectory = calcCurrentTrajectory();
+            preRenderPolygon(animpoly);
+        }
         animq.push(animpoly);
         if (animq.length == 1) { // first one, start the animation!
             draw();
@@ -227,11 +261,12 @@ function gameMouseMove(evt) {
                 redraw(middleground_ctx);
                 
                 // potential for additional scrapings
-                if (Math.random() < 0.10) {
+                if (Math.random() < 0.08) {
                     var plusone = crumble(i);
                     if (plusone != -1) {
                         polygons[plusone].scraped = true;
                         eject(polygons[plusone]); // start animation for this polygon
+                        eject({image: true, cachedRender: starsRender, ctx: {x: mX, y: mY} });
                         play_ding();
                         num_scraped++;
                         redraw(middleground_ctx);
@@ -314,7 +349,23 @@ function setup() {
     imageObj = new Image();
     imageObj.src = "img/scraper3.png";
 
+    var stars = new Image();
+    stars.onload = function() {
+        // pre render double scrape stars
+        var canvas = $("<canvas></canvas>");
+        canvas.attr("width", w);
+        canvas.attr("height", h);
+        canvas.attr("id", "scrapeStar");
+        $("#renderCache").append(canvas);
+
+        var star_ctx = canvas[0].getContext("2d");
+        star_ctx.drawImage(stars, 0, 0);
+        starsRender = canvas[0];
+    };
+    stars.src = "img/stars.png";
+
     // fill the gradient layer
+
     var grad = gradient_ctx.createRadialGradient(w/2, h/2, 180, w/2, h/2, h);
     grad.addColorStop(0, "transparent");
     grad.addColorStop(1, "#000000");
