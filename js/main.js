@@ -4,6 +4,7 @@ var background_ctx;
 var middleground_ctx;
 var foreground_ctx;
 var cursor_ctx;
+var imageObj;
 
 // global canvas w and h
 var w;
@@ -110,6 +111,10 @@ function setup() {
 		cursor_ctx = cursor.getContext("2d");
 		var gradient_ctx = gradient.getContext("2d");	
 
+        // load cursor image asset.
+	    imageObj = new Image();
+	    imageObj.src = "http://i.imgur.com/B8pfNzU.png";
+
 		// fill the gradient layer
 		var grad = gradient_ctx.createRadialGradient(w/2, h/2, 180, w/2, h/2, h);
 		grad.addColorStop(0, "transparent");
@@ -124,7 +129,7 @@ function setup() {
 		// fill the middleground, with polygons
 		fillMiddleground(middleground_ctx);
 
-		// set cursor, teehee
+        // set cursor
 		$('#cursor').mousemove( function(e) {
 				drawScraper(e);
 	      gameMouseMove(e);
@@ -154,12 +159,9 @@ function redraw(ctx) {
 
 function drawScraper(e) {
 	cursor_ctx.clearRect(0, 0, w, h);
-	var imageObj = new Image();
 	console.log("move");
-	imageObj.onload = function() {
-		cursor_ctx.drawImage(imageObj, e.pageX - cvs_left, e.pageY - cvs_top);
-	};
-	imageObj.src = "http://i.imgur.com/B8pfNzU.png";
+    console.log(imageObj.src + "");
+    cursor_ctx.drawImage(imageObj, e.pageX - cvs_left, e.pageY - cvs_top);
 };
 
 function fillMiddleground(ctx) {
@@ -175,6 +177,5 @@ function fillMiddleground(ctx) {
 	};
 	imageObj.src = "http://farm4.staticflickr.com/3333/3333171389_35b840e742_o.jpg";
 	//imageObj.src = "http://farm3.staticflickr.com/2176/2394924890_02a6b830a7_b.jpg";
-
 
 };
