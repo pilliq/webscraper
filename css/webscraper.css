@@ -141,7 +141,7 @@ body {
 		width: 800px;
 		background: rgba(120, 120, 80, 0.4);
 		z-index: 100;
-        font-size: 18pt;
+        font-size: 14pt;
 }
 
 @font-face {
@@ -153,7 +153,7 @@ h1 {
     font-family: 'whoa';    
     font-size: 60pt;
     padding-top: 30px;
-    color: #53B0D2;
+    color: orange;
     text-shadow:
         -1px -1px 0 #ffffff,  
         1px -1px 0 #ffffff,
