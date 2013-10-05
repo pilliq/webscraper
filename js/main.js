@@ -230,6 +230,8 @@ function gameMouseMove(evt) {
 // does initial setup
 function setup() {
     game_over = false;
+    start_time=null;
+    $("#wintoast").hide();
 
     var background = document.getElementById("background");
     var middleground_shadow = document.getElementById("middleground-shadow");
