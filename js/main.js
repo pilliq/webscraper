@@ -194,6 +194,7 @@ function gameMouseMove(evt) {
 function setup() {
 
     var background = document.getElementById("background");
+    var middleground_shadow = document.getElementById("middleground-shadow");
     var middleground = document.getElementById("middleground");
     var foreground = document.getElementById("foreground");
     var gradient = document.getElementById("gradient");
@@ -236,6 +237,7 @@ function setup() {
     });
 
     background_ctx = background.getContext("2d");
+    middleground_shadow_ctx = middleground_shadow.getContext("2d");
     middleground_ctx = middleground.getContext("2d");
     foreground_ctx = foreground.getContext("2d");
     cursor_ctx = cursor.getContext("2d");
@@ -284,9 +286,17 @@ function drawOne(p,ctx) {
 */
 function redraw(ctx) {
     ctx.clearRect(0,0,w,h);
+    middleground_shadow_ctx.clearRect(0,0,w,h);
+    middleground_shadow_ctx.shadowColor = '#555';
+    middleground_shadow_ctx.shadowOffsetY = 2;
+    middleground_shadow_ctx.shadowBlur = 2;
+    for (var i = 0; i < polygons.length; i++) {
+        drawOne(polygons[i], middleground_shadow_ctx);
+    }
     for (var i = 0; i < polygons.length; i++) {
         drawOne(polygons[i], ctx);
     }
+    var imgData=ctx.getImageData(10,10,50,50);
 }
 
 function drawScraper(e) {

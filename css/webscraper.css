@@ -32,6 +32,9 @@ body {
 #background {
                 z-index: 2;
             }
+#middleground-shadow {
+                z-index: 3;
+            }
 
 #middleground {
                 z-index: 4;
