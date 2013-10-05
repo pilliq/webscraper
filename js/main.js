@@ -175,7 +175,7 @@ function gameMouseMove(evt) {
 
     var eject = function(polygon) { // push onto the queue for ejection
         var animpoly = clone(polygon);
-        animpoly.speed = {x: 0, y: .2 + Math.random() * 32}; //random speed
+        animpoly.speed = {x: 0, y: 16 + Math.random() * 16}; //random speed
         animpoly.angularSpeed = 0;
         animpoly.ctx = {x: 0, y: 0, angle: 0};
         preRenderPolygon(animpoly);
