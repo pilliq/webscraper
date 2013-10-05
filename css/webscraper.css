@@ -46,27 +46,47 @@ body {
 		cursor: none;
 }
 
+#topContainer {
+			  position: relative;
+			  }
+
 .frame {
 	   position: absolute;
 	   z-index: 6;
 	   }
 
 #tape1 {
-	  left: 100px;
-	  top: 40px;
+	  left: -100px;
+	  top: 35px;
+	  background-image:url('../img/tape/tape1.png');	
+	  background-size: 950px 100px;
+	  width: 970px;
+	  height: 100px;
 }
 
 #tape2 {
-	   left: 155px;
-	   top: 15px;
+	   left: -75px;
+	   top: -20px;
+	   background-image:url('../img/tape/tape2.png');	
+	   background-size: 100px 820px;
+	   width: 105px;
+	   height: 820px;
 	   }
 
 #tape3 {
-	   left: 1000px;
-	   top: 40px;
+	   left: 755px;
+	   top: 10px;
+	   background-image:url('../img/tape/tape3.png');	
+	   background-size: 100px 820px;
+	   width: 90px;
+	   height: 820px;
 	   }
 
 #tape4 {
-	   left: 125px;
-	   top: 684px;
+	   left: -80px;
+	   top: 688px;
+ 	   background-image:url('../img/tape/tape4.png');	
+	   background-size: 940px 100px;
+	   height: 90px;
+	   width: 940px;
 }
