@@ -6,11 +6,15 @@
             
 canvas {
 	   background-color: transparent;																				
+			 cursor:crosshair;
        }
 
 .canvas {
        position: absolute;
        }
+.canvas:active { 
+    cursor: crosshair;
+}
 
 body {
 	 background-image:url('../img/walls/wall2.jpg');
@@ -30,19 +34,19 @@ body {
             }
 
 #middleground {
-                z-index: 3;
-            }
-
-#foreground {
                 z-index: 4;
             }
 
+#foreground {
+                z-index: 5;
+            }
+
 #gradient {
-		  z-index: 5;
+		  z-index: 6;
 }
 
 #cursor {
-		z-index: 7;
+		z-index: 8;
 		cursor: none;
 }
 
@@ -52,7 +56,7 @@ body {
 
 .frame {
 	   position: absolute;
-	   z-index: 6;
+	   z-index: 7;
 	   }
 
 #tape1 {
@@ -109,3 +113,20 @@ body {
 	   left: 900px;
 	   top: 140px;
 }
+
+#wintoast {
+		padding:10px 0px;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		display: none; //switch 2 block on win
+		position: absolute; bottom:-700px; /*hack*/ 
+		height: 100px;
+		width:800px;
+		background: orange;
+		z-index: 100;
+}
+

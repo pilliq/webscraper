@@ -6,6 +6,7 @@ var recentlyIn = -1;
 var num_scraped = 0;
 
 var background_ctx;
+var middleground_shadow_ctx;
 var middleground_ctx;
 var foreground_ctx;
 var cursor_ctx;
@@ -160,15 +161,18 @@ function gameMouseMove(evt) {
                 num_scraped++;
                 recentlyScraped = i;
 
+                if (!start_time) setup_timer();
+
                 play_sound();
                 redraw(middleground_ctx);
                 
                 // potential for additional scrapings
-                if (Math.random() < 0.2) {
+                if (Math.random() < 0.1) {
                     var plusone = crumble(i);
                     if (plusone != -1) {
                         polygons[plusone].scraped = true;
                         eject(polygons[plusone]); // start animation for this polygon
+                        play_ding();
                         num_scraped++;
                         redraw(middleground_ctx);
                     }
@@ -183,7 +187,7 @@ function gameMouseMove(evt) {
         }
     }
     if (num_scraped == polygons.length - 1) 
-        win(foreground_ctx, w, h, cvs_left, cvs_top);
+        win(middleground_ctx, w, h, cvs_left, cvs_top);
 }
 
 // does initial setup
@@ -219,6 +223,7 @@ function setup() {
 
     //hack for mouse status
     $(document).mousedown(function(e){
+        e.originalEvent.preventDefault();
         // Left mouse button was pressed, set flag
         if(e.which === 1) leftButtonDown = true;
     });
@@ -263,8 +268,6 @@ function setup() {
         gameMouseMove(e);
     });
 
-    // setup timer
-    setup_timer();
 };
 
 
@@ -300,8 +303,13 @@ function fillMiddleground(ctx) {
         ctx.fillStyle = pattern;
         redraw(ctx);
     };
-    imageObj.src = "http://farm4.staticflickr.com/3333/3333171389_35b840e742_o.jpg";
-    //imageObj.src = "http://farm3.staticflickr.com/2176/2394924890_02a6b830a7_b.jpg";
+
+    // randomly choose paint texture.
+    var wallpaint_imgs = ["img/paint/paint0.jpg", "img/paint/paint1.jpg", 
+                          "img/paint/paint3.jpg", "img/paint/paint4.jpg",
+                          "img/paint/paint5.jpg", "img/paint/paint6.jpg",
+                          "img/paint/paint7.jpg"]
+    imageObj.src = wallpaint_imgs[Math.floor((Math.random()*wallpaint_imgs.length))];
 };
 
 // contains the functionality for crumbling nearby polygons

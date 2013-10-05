@@ -2,7 +2,6 @@ var start_time;
 
 function setup_timer() {
     start_time = new Date();
-    update_timer();
 }
 
 function update_timer() {
