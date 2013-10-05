@@ -119,7 +119,7 @@ function setup() {
 
     // load cursor image asset.
     imageObj = new Image();
-    imageObj.src = "http://i.imgur.com/B8pfNzU.png";
+    imageObj.src = "http://i.imgur.com/ZBa2gaG.png";
 
     // fill the gradient layer
     var grad = gradient_ctx.createRadialGradient(w/2, h/2, 180, w/2, h/2, h);
