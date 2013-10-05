@@ -204,8 +204,7 @@ function gameMouseMove(evt) {
                 redraw(middleground_ctx);
                 
                 // potential for additional scrapings
-                if (Math.random() < 0.5) {
-                    console.log("hereee");
+                if (Math.random() < 0.15) {
                     var plusone = crumble(i);
                     if (plusone != -1) {
                         polygons[plusone].scraped = true;
