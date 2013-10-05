@@ -103,7 +103,8 @@ function load_page() {
 	cvs_l = $(cvs).offset().left;
 	cvs_t = $(cvs).offset().top;
 	console.log(cvs_t);
-	polys = squares(20, 5, 800, 600);
+	testPolygons();
+	polys = polygons;//squares(200, 10, 800, 600);
 	$(cvs).mousemove(horribleCollision);
 
 	redraw();

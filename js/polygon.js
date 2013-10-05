@@ -28,8 +28,8 @@ function testPolygons() {
 	var poly = {};
 	var pts = [];
 
-	var w = 600;
-	var h = 400;
+	var w = 800;
+	var h = 600;
 
 	// bottom points
 	for (var i = 0; i < w; i += 50) {
@@ -74,10 +74,11 @@ function crackle(polygon, reps) {
 			poly_pts.push(points[i]);
 		}
 		poly["points"] = poly_pts;
+		poly["alive"] = true;
 		polygons.push(poly);
 
 		// draw here for testing
-		drawPoly(poly);
+	//	drawPoly(poly);
 
 		return;
 	}
