@@ -34,15 +34,11 @@
         var drawPolygon = function(polygon, context) {
             context.beginPath();
 
-            context.moveTo(
-            c2.fillStyle = '#f00';
-            c2.beginPath();
-            c2.moveTo(0, 0);
-            c2.lineTo(100,50);
-            c2.lineTo(50, 100);
-            c2.lineTo(0, 90);
-            c2.closePath();
-            c2.fill();
+            context.moveTo(polygon.points[0].x, polygon.points[0].y);
+            for (var i = 1; i < polygon.points.length; i++) {
+                context.lineTo(polygon.points[i].x, polygon.points[i].y);
+            }
+            context.closePath();
         };
 
         var drawPolygons = function(polygons) {
@@ -76,15 +72,18 @@
         $(document).ready(function() {
             var background = document.getElementById("background").getContext("2d");
             var middleground = document.getElementById("middleground").getContext("2d");
-            middleground.fillStyle = "#FF0000";
-            middleground.fillRect(10, 10, 150, 180);
-            var cvs = document.getElementById("background"),
-                ctx = cvs.getContext("2d"),
-                w = cvs.width,
-                h = cvs.height;
+            //middleground.fillStyle = "#FF0000";
+            //middleground.fillRect(10, 10, 150, 180);
 
             var polygons = squares(16, 700, 500);
             console.log(polygons);
+
+            var square = {points: [{x: 0, y: 0}, {x: 150, y: 0}, { x: 150, y: 180}, {x: 0, y: 180}, {x: 0, y:0}]};
+            /* Draw a polygon */
+            middleground.fillStyle = "#FF0000";
+            drawPolygon(square, middleground);
+            middleground.fill();
+
         });
     </script>
 </html>
