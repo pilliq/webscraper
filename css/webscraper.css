@@ -108,13 +108,7 @@ body {
 	   width: 940px;
 }
 
-#facebookIcon {
-	   background-image:url('../img/paper-down.png');
-	   height: 80px;
-	   width: 80px;
-}
-
-#refreshIcon {
+.paperIcon {
 	   background-image:url('../img/paper-down.png');
 	   height: 80px;
 	   width: 80px;
