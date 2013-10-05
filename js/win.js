@@ -11,16 +11,16 @@ function win(ctx, cvs_w, cvs_h, cvs_left, cvs_top) {
 // from mozilla developer tutorial "drawing shapes with canvas"
 // https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Canvas_tutorial/Drawing_shapes
 function roundedRect(ctx, x, y, width, height, radius){
-  ctx.beginPath();
-  ctx.moveTo(x,y+radius);
-  ctx.lineTo(x,y+height-radius);
-  ctx.quadraticCurveTo(x,y+height,x+radius,y+height);
-  ctx.lineTo(x+width-radius,y+height);
-  ctx.quadraticCurveTo(x+width,y+height,x+width,y+height-radius);
-  ctx.lineTo(x+width,y+radius);
-  ctx.quadraticCurveTo(x+width,y,x+width-radius,y);
-  ctx.lineTo(x+radius,y);
-  ctx.quadraticCurveTo(x,y,x,y+radius);
-  ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x,y+radius);
+    ctx.lineTo(x,y+height-radius);
+    ctx.quadraticCurveTo(x,y+height,x+radius,y+height);
+    ctx.lineTo(x+width-radius,y+height);
+    ctx.quadraticCurveTo(x+width,y+height,x+width,y+height-radius);
+    ctx.lineTo(x+width,y+radius);
+    ctx.quadraticCurveTo(x+width,y,x+width-radius,y);
+    ctx.lineTo(x+radius,y);
+    ctx.quadraticCurveTo(x,y,x,y+radius);
+    ctx.stroke();
 }
 
