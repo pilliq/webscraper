@@ -60,7 +60,7 @@ function gameMouseMove(evt) {
     mY = evt.pageY - cvs_top;
     for (var i = 0; i < polygons.length; i++) {
         if (inPoly(mX, mY, polygons[i])){
-            if(leftButtonDown && polygons[recentlyIn].scraped
+            if(leftButtonDown && recentlyIn != -1 && polygons[recentlyIn].scraped
                && !polygons[i].scraped && recentlyScraped == -1  ){
                 //scrape!!
                 polygons[i].scraped = true;
