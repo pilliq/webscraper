@@ -1,6 +1,8 @@
 /* css! */
 
-#viewport { position: relative; }
+#viewport { 
+		  position: relative; 
+		  }
             
 canvas {
 	   background-color: transparent;																				
@@ -11,7 +13,7 @@ canvas {
        }
 
 body {
-	 background-image:url('../img/rooms/room2.jpg');
+	 background-image:url('../img/walls/wall2.jpg');
 }
 
 #backgroundImage {
@@ -20,11 +22,12 @@ body {
 				 width: 1400;
 				 height: 1400;
 				 background-color: #ffe9e9;
+				 box-shadow: 10px 10px 10px #000000;	
 				 }
 
 #background {
                 z-index: 2;
-				background-image:url('../img/walls/wall0.jpg');
+/*				background-image:url('../img/walls/wall0.jpg');*/
             }
 
 #middleground {
@@ -42,4 +45,14 @@ body {
 #cursor {
 		z-index: 6;
 		cursor: none;
+}
+
+.frame {
+	   position: fixed;
+	   z-index: 7;
+	   }
+
+#tape1 {
+	  left: 200;
+	  top: 50;
 }

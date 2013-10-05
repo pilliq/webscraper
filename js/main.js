@@ -87,6 +87,7 @@ var squares = function(numSquares, rows, width, height) {
 // does initial setup
 function setup() {
 
+<<<<<<< Updated upstream
     var background = document.getElementById("background");
     var middleground = document.getElementById("middleground");
     var foreground = document.getElementById("foreground");
@@ -134,6 +135,7 @@ function setup() {
         drawScraper(e);
         gameMouseMove(e);
     });
+
 };
 
 
@@ -177,5 +179,6 @@ function fillMiddleground(ctx) {
     };
     imageObj.src = "http://farm4.staticflickr.com/3333/3333171389_35b840e742_o.jpg";
     //imageObj.src = "http://farm3.staticflickr.com/2176/2394924890_02a6b830a7_b.jpg";
+
 
 };
