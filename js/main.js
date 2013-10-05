@@ -134,6 +134,9 @@ function setup() {
         drawScraper(e);
         gameMouseMove(e);
     });
+
+    // setup timer
+    setup_timer();
 };
 
 
