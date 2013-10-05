@@ -1,5 +1,8 @@
 // some global variables, for ease
 
+var leftButtonDown = false;
+var recentlyScraped = false;
+var wasInScrapedSpace = false;
 var background_ctx;
 var middleground_ctx;
 var foreground_ctx;
@@ -50,11 +53,12 @@ function gameMouseMove(evt) {
 
     mX = evt.pageX - cvs_left;
     mY = evt.pageY - cvs_top;
-    console.log([mX,mY]);
     for (var i = 0; i < polygons.length; i++) {
-        if(!polygons[i].scraped && inPoly(mX, mY, polygons[i])){
-            polygons[i].scraped = true;
-            redraw(middleground_ctx);
+        if(leftButtonDown && !recentlyScraped && 
+           !polygons[i].scraped && inPoly(mX, mY, polygons[i])){
+               polygons[i].scraped = true;
+               redraw(middleground_ctx);
+               recentlyScraped = true;
         }
     }
 }
@@ -105,6 +109,19 @@ function setup() {
     gradient.height = h;
     cursor.height = h;
 
+    //hack for mouse status
+    $(document).mousedown(function(e){
+        // Left mouse button was pressed, set flag
+        if(e.which === 1) leftButtonDown = true;
+    });
+    $(document).mouseup(function(e){
+        // Left mouse button was released, clear flag
+        if(e.which === 1){
+            leftButtonDown = false;
+            recentlyScraped = false;
+        }
+    });
+
     background_ctx = background.getContext("2d");
     middleground_ctx = middleground.getContext("2d");
     foreground_ctx = foreground.getContext("2d");
@@ -140,8 +157,6 @@ function setup() {
 /* Draws one polygon
 */
 function drawOne(p,ctx) {
-    console.log(ctx);
-    //console.log(rect);
     if (!p.scraped) {
         drawPolygon(p, ctx);
         ctx.fill();
@@ -159,15 +174,11 @@ function redraw(ctx) {
 
 function drawScraper(e) {
     cursor_ctx.clearRect(0, 0, w, h);
-    console.log("move");
-    console.log(imageObj.src + "");
     cursor_ctx.drawImage(imageObj, e.pageX - cvs_left - 70, e.pageY - cvs_top - 20);
 };
 
 function fillMiddleground(ctx) {
     var imageObj = new Image();
-
-    console.log(ctx);
 
     imageObj.onload = function() {
         //ctx.drawImage(imageObj, 0, 0);
