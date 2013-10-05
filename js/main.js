@@ -227,7 +227,7 @@ function gameMouseMove(evt) {
                 redraw(middleground_ctx);
                 
                 // potential for additional scrapings
-                if (Math.random() < 0.15) {
+                if (Math.random() < 0.10) {
                     var plusone = crumble(i);
                     if (plusone != -1) {
                         polygons[plusone].scraped = true;
@@ -264,7 +264,6 @@ function setup() {
     var cursor = document.getElementById("cursor");
 
     fb_string = "";
-    update_fb_link();
     num_scraped = 0;
 
     cvs_left = $(background).offset().left;
