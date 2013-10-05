@@ -8,6 +8,11 @@ var drawPolygon = function(polygon, context) {
     context.closePath();
 };
 
+var erasePolygon = function(polygon, context) {
+    context.globalCompositeOperation = 'destination-out';
+    drawPolygon(polygon, context);
+    context.fill()
+};
 /* Given the number of squares to make and the with and height of the container
    generates a list of polygons according to polygon spec
  */
@@ -43,11 +48,12 @@ $(document).ready(function() {
     console.log(polygons);
 
     var square = {points: [{x: 0, y: 0}, {x: 150, y: 0}, { x: 150, y: 180}, {x: 0, y: 180}, {x: 0, y:0}]};
-    /* Draw a polygon */
+    /* Fill the board with Squares */
     for (var i = 0; i < polygons.length; i++) {
         middleground.fillStyle = "#FF0000";
         drawPolygon(polygons[i], middleground);
         middleground.fill();
     }
 
+    erasePolygon(polygons[0], middleground);
 });
