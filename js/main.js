@@ -238,7 +238,8 @@ function setup() {
     var cursor = document.getElementById("cursor");
 
     fb_string = "";
-    //update_fb_link();
+    update_fb_link();
+    num_scraped = 0;
 
     cvs_left = $(background).offset().left;
     cvs_top = $(background).offset().top;

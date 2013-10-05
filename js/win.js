@@ -9,12 +9,12 @@ function win(ctx, cvs_w, cvs_h, cvs_left, cvs_top) {
     $("#yourTime").text( (time/1000) + " sec");
     $("#wintoast").fadeIn();
 }
-/*
+
 function update_fb_link() {
-    var linku = "https://www.facebook.com/dialog/feed?app_id=145634995501895 &display=popup&caption=A%20JS%20Web%20Scraper &link=kyleerf.com"
+    var linku = "https://www.facebook.com/dialog/feed?app_id=240548372765988 &display=popup&caption=A%20JS%20Web%20Scraper &redirect_uri=https://developers.facebook.com/tools/explorer &link=kyleerf.com"
     if (fb_string != "") {;}
 
-    $("#fblink")attr("href", linku);
+    $("#fblink").attr("href", linku);
 
-}*/
+}
 
