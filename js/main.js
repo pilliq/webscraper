@@ -200,6 +200,9 @@ function setup() {
     var gradient = document.getElementById("gradient");
     var cursor = document.getElementById("cursor");
 
+    fb_string = "";
+    //update_fb_link();
+
     cvs_left = $(background).offset().left;
     cvs_top = $(background).offset().top;
 
