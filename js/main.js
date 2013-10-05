@@ -204,7 +204,8 @@ function gameMouseMove(evt) {
                 redraw(middleground_ctx);
                 
                 // potential for additional scrapings
-                if (Math.random() < 0.1) {
+                if (Math.random() < 0.5) {
+                    console.log("hereee");
                     var plusone = crumble(i);
                     if (plusone != -1) {
                         polygons[plusone].scraped = true;
@@ -286,7 +287,7 @@ function setup() {
 
     // load cursor image asset.
     imageObj = new Image();
-    imageObj.src = "http://i.imgur.com/nS6TUxb.png";
+    imageObj.src = "img/scraper.png";
 
     // fill the gradient layer
     var grad = gradient_ctx.createRadialGradient(w/2, h/2, 180, w/2, h/2, h);
@@ -337,7 +338,6 @@ function redraw(ctx) {
     for (var i = 0; i < polygons.length; i++) {
         drawOne(polygons[i], ctx);
     }
-    var imgData=ctx.getImageData(10,10,50,50);
 }
 
 function drawScraper(e) {
