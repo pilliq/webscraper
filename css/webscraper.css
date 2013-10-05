@@ -27,7 +27,6 @@ body {
 
 #background {
                 z-index: 2;
-/*				background-image:url('../img/walls/wall0.jpg');*/
             }
 
 #middleground {
@@ -43,16 +42,31 @@ body {
 }
 
 #cursor {
-		z-index: 6;
+		z-index: 7;
 		cursor: none;
 }
 
 .frame {
-	   position: fixed;
-	   z-index: 7;
+	   position: absolute;
+	   z-index: 6;
 	   }
 
 #tape1 {
-	  left: 200;
-	  top: 50;
+	  left: 100px;
+	  top: 40px;
+}
+
+#tape2 {
+	   left: 140px;
+	   top: 40px;
+	   }
+
+#tape3 {
+	   left: 1000px;
+	   top: 40px;
+	   }
+
+#tape4 {
+	   left: 165px;
+	   top: 600px;
 }

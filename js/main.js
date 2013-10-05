@@ -87,7 +87,6 @@ var squares = function(numSquares, rows, width, height) {
 // does initial setup
 function setup() {
 
-<<<<<<< Updated upstream
     var background = document.getElementById("background");
     var middleground = document.getElementById("middleground");
     var foreground = document.getElementById("foreground");
@@ -98,7 +97,7 @@ function setup() {
     cvs_top = $(background).offset().top;
 
     // make canvas full height of page
-    h = document.height;
+    h = background.height;
     w = background.width;
     background.height = h;
     middleground.height= h;
