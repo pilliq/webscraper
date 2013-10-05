@@ -52,7 +52,7 @@ function testPolygons() {
 	}
 	polygons = [];
 	poly["points"] = pts;
-	crackle(poly, 6); 
+	crackle(poly, 5); 
 }
 
 // takes an array of coordinates, representing a polygon
@@ -84,7 +84,8 @@ function crackle(polygon, reps) {
 
 	// divide polygon and return
 	var n = points.length;
-	var mid = Math.floor(n/2);
+	var mid = Math.floor(n/2 + Math.random()*4);
+	if (mid >= n) mid = n - 1;
 
 	// are these two points in line with each other?
 	// if so, change mid
@@ -200,7 +201,8 @@ function isPointInPoly(poly, pt){
 function cycleArray(array) {
 	new_array = [];
 	var l = array.length;
-	var n = Math.floor(Math.random()*20);
+	var n = Math.floor(l/4);
+	//	var n = Math.floor(Math.random()*20);
 	if (n >= l) return array;
 	//var n = Math.floor(l/2);
 	//var n = Math.floor(l/2) + Math.floor(Math.random()*3);
