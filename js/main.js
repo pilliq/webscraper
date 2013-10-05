@@ -6,6 +6,7 @@ var recentlyIn = -1;
 var num_scraped = 0;
 
 var background_ctx;
+var middleground_shadow_ctx;
 var middleground_ctx;
 var foreground_ctx;
 var cursor_ctx;
@@ -212,6 +213,7 @@ function setup() {
 
     //hack for mouse status
     $(document).mousedown(function(e){
+        e.originalEvent.preventDefault();
         // Left mouse button was pressed, set flag
         if(e.which === 1) leftButtonDown = true;
     });
@@ -256,8 +258,6 @@ function setup() {
         gameMouseMove(e);
     });
 
-    // setup timer
-    //setup_timer();
 };
 
 
