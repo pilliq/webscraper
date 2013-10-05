@@ -4,6 +4,16 @@
 		  position: relative; 
 		  }
             
+#renderCache {
+    display: none;
+    position: relative;
+}
+
+#renderCache > canvas {
+    display: none;
+    position: absolute;
+}
+
 canvas {
 	   background-color: transparent;																				
 			 cursor:crosshair;
@@ -132,4 +142,3 @@ body {
 		background: orange;
 		z-index: 100;
 }
-

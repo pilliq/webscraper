@@ -11,6 +11,7 @@ var middleground_ctx;
 var foreground_ctx;
 var cursor_ctx;
 var imageObj;
+var backgroundImage;
 
 // global canvas w and h
 var w;
@@ -77,35 +78,39 @@ var translatePolygon = function(polygon, x, y) {
     }
 };
 
-var minX = function(polygon) {
-    var min = {x: polygon.points[0].x, y: polygon.points[0].y};
-    for (var i = 0; i < polygon.points.length; i++) {
-        if (polygon.points[i].x < min.x) {
-            min.x = polygon.points[i].x;
-            min.y = polygon.points[i].y;
+/* Returns the point with the minimum x from an array of points 
+ */
+var minX = function(points) {
+    var min = {x: points[0].x, y: points[0].y};
+    for (var i = 0; i < points.length; i++) {
+        if (points[i].x < min.x) {
+            min.x = points[i].x;
+            min.y = points[i].y;
         }
     }   
     return min;
 };
 
-var minY = function(polygon) {
-    var min = {x: polygon.points[0].x, y: polygon.points[0].y};
-    for (var i = 0; i < polygon.points.length; i++) {
-        if (polygon.points[i].y < min.y) {
-            min.x = polygon.points[i].x;
-            min.y = polygon.points[i].y;
+/* Returns the point with the minimum y from an array of points 
+ */
+var minY = function(points) {
+    var min = {x: points[0].x, y: points[0].y};
+    for (var i = 0; i < points.length; i++) {
+        if (points[i].y < min.y) {
+            min.x = points[i].x;
+            min.y = points[i].y;
         }
     }   
     return min;
 };
 
+/* Checks if the drawing context for given polygon is
+ * out of bounds of viewport
+ */ 
 var offCanvas = function(polygon) {
-    var miny = minY(polygon);
-    if (miny.y > h) return true;
-
-    var minx = minX(polygon);
-    if (minx.x > w) return true;
-
+    if (polygon.ctx.y > h || polygon.ctx.x > w) {
+        return true;
+    }
     return false;
 };
 
@@ -116,11 +121,40 @@ function gameMouseMove(evt) {
         return isPointInPoly(p.points, {x:x, y:y});
     }
 
+    /* Draws a polygon onto a blank canvas in the renderCache div.
+       Returns a selected HTML element of that canvas
+     */
+    var preRenderPolygon = function(polygon) {
+        // setup canvas
+        var canvas = $("<canvas></canvas>");
+        canvas.attr("width", w);
+        canvas.attr("height", h);
+        $("#renderCache").append(canvas);
+
+        // render polygon
+        var ctx = canvas[0].getContext("2d");
+        var pattern = ctx.createPattern(backgroundImage, "no-repeat");
+        ctx.fillStyle = pattern;
+        drawPolygon(polygon, ctx);
+        ctx.fill();
+        
+        // save reference to the rendered canvas
+        polygon.cachedRender = canvas[0];
+    };
+
+    var render = function(polygon) { // draws polygon
+        foreground_ctx.save();
+            foreground_ctx.translate(polygon.ctx.x, polygon.ctx.y);
+            foreground_ctx.rotate(polygon.ctx.angle);
+            foreground_ctx.drawImage(polygon.cachedRender, 0, 0);
+        foreground_ctx.restore();
+    }
+
     var update = function(polygon) { // updates position of polygon for animation
-        translatePolygon(polygon, 0, polygon.speed); // fall straight down
-        foreground_ctx.fillStyle = "#00FF00";
-        drawPolygon(polygon, foreground_ctx);
-        foreground_ctx.fill();
+        polygon.ctx.x += polygon.speed.x;
+        polygon.ctx.y += polygon.speed.y;
+        polygon.ctx.angle += polygon.angularSpeed;
+        render(polygon);
     };
 
     var draw = function() {
@@ -128,11 +162,11 @@ function gameMouseMove(evt) {
         for (var i = 0; i < animq.length; i++) {
             update(animq[i]);
             if (offCanvas(animq[i])) {
-                animq.splice(i,1); 
+                var deletedPolygon = animq.splice(i,1)[0]; 
+                $(deletedPolygon.cachedRender).remove();
                 i--;
             } 
         }
-        console.log(animq.length);
 
         if (animq.length != 0) {
             requestAnimationFrame(draw);
@@ -141,7 +175,10 @@ function gameMouseMove(evt) {
 
     var eject = function(polygon) { // push onto the queue for ejection
         var animpoly = clone(polygon);
-        animpoly.speed = .2 + Math.random() * 3; //random speed
+        animpoly.speed = {x: 0, y: .2 + Math.random() * 32}; //random speed
+        animpoly.angularSpeed = 0;
+        animpoly.ctx = {x: 0, y: 0, angle: 0};
+        preRenderPolygon(animpoly);
         animq.push(animpoly);
         if (animq.length == 1) { // first one, start the animation!
             draw();
@@ -312,7 +349,8 @@ function fillMiddleground(ctx) {
 
     imageObj.onload = function() {
         //ctx.drawImage(imageObj, 0, 0);
-        var pattern = ctx.createPattern(imageObj, "repeat");
+        var pattern = ctx.createPattern(imageObj, "no-repeat");
+        backgroundImage = imageObj;
         ctx.fillStyle = pattern;
         redraw(ctx);
     };
