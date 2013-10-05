@@ -40,6 +40,43 @@ function isPointInPoly(poly, pt){
     return c;
 }
 
+var clone = function (p,c) {
+    var c = c || {};
+    for (var i in p) {
+        if (typeof p[i] === 'object') {
+            c[i] = (p[i].constructor === Array)?[]:{};
+            clone(p[i],c[i]);
+        } else {
+            c[i] = p[i];
+        }
+    }
+    return c;
+}
+
+/* Returns a new translated polygon */
+var translatePolygon = function(polygon, x, y) {
+    var translatedPolygon = clone(polygon);
+    for (var i = 0; i < translatedPolygon.points.length; i++) {
+        translatedPolygon.points[i].x += x;
+        translatedPolygon.points[i].y += y;
+    }
+
+    return translatedPolygon;
+};
+
+/* Given a polygon, creates a maxy field that is a pointer to the
+   point which contains the highest value for the y coordinate
+*/
+var maxY = function(polygon) {
+    var maxy = {x: polygon.points[0].x, y: polygon.points[0].y};
+    for (var i = 0; i < polygon.points.length; i++) {
+        if (polygon.points[i].y < maxy.y) {
+            maxy = polygon.points[i];
+        }
+    }
+    polygon.maxy = maxy; 
+};
+
 /* The main game "loop", called wheneverthe mouse is moved
  */
 function gameMouseMove(evt) {
@@ -47,6 +84,38 @@ function gameMouseMove(evt) {
 		function inPoly(x,y,p){
 				return isPointInPoly(p.points, {x:x, y:y});
 		}
+        window.requestAnimFrame = (function(callback) {
+            return window.requestAnimationFrame || 
+                   window.webkitRequestAnimationFrame || 
+                   window.mozRequestAnimationFrame || 
+                   window.oRequestAnimationFrame || 
+                   window.msRequestAnimationFrame; //||
+                   //function(callback) {
+                   //     window.setTimeout(callback, 1000/60);
+                   //};
+        })();
+
+        function animate(context, polygon) {
+            // update
+            var moved = translatePolygon(polygon, 0, 25);
+
+            // clear
+            context.clearRect(0, 0, w, h);
+
+            // draw 
+            context.fillStyle = "#00FF00";
+            drawPolygon(moved, context);
+            context.fill();
+
+            maxY(moved);
+            console.log(moved.maxy);
+            // request new frame
+            if (moved.maxy.y < h) {
+                requestAnimFrame(function() {
+                    animate(context, moved);
+                });
+            }
+        }
 
 		mX = evt.pageX - cvs_left;
 		mY = evt.pageY - cvs_top;
@@ -55,6 +124,7 @@ function gameMouseMove(evt) {
 				if(!polygons[i].scraped && inPoly(mX, mY, polygons[i])){
 						polygons[i].scraped = true;
 						redraw(middleground_ctx);
+                        animate(foreground_ctx, polygons[i]);
 				}
 		}
 }
@@ -126,6 +196,12 @@ function setup() {
 		// get list of polygons filled		
 		setupPolygons(background.width, background.height);
 
+        // Calculate maxY coords
+        for (var i in polygons) {
+            maxY(polygons[i]);
+        }
+        console.log(polygons);
+
 		// fill the middleground, with polygons
 		fillMiddleground(middleground_ctx);
 
@@ -140,12 +216,11 @@ function setup() {
 /* Draws one polygon
  */
 function drawOne(p,ctx) {
-	console.log(ctx);
-		//console.log(rect);
-		if (!p.scraped) {
-				drawPolygon(p, ctx);
-				ctx.fill();
-		}
+    //console.log(rect);
+    if (!p.scraped) {
+            drawPolygon(p, ctx);
+            ctx.fill();
+    }
 }
 
 /* redraw entire buffer, commiting changes
@@ -159,8 +234,6 @@ function redraw(ctx) {
 
 function drawScraper(e) {
 	cursor_ctx.clearRect(0, 0, w, h);
-	console.log("move");
-    console.log(imageObj.src + "");
     cursor_ctx.drawImage(imageObj, e.pageX - cvs_left, e.pageY - cvs_top);
 };
 
