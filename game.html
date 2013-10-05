@@ -32,10 +32,13 @@
 		  
 		  <div id="viewport" width="800">
 			<canvas class="canvas" id="background" height="600" width="800"></canvas>
+			<canvas class="canvas" id="middleground-shadow" height="600" width="800"></canvas>
 			<canvas class="canvas" id="middleground" height="600" width="800"></canvas>
 			<canvas class="canvas" id="foreground" height="600" width="800"></canvas>
 			<canvas class="canvas" id="gradient" height="600" width="800"></canvas>
 			<canvas class="canvas" id="cursor" height="600" width="800"></canvas>
+         </div>
+         <div id="renderCache" width="800">
          </div>
 		  
 		</div>
@@ -43,14 +46,14 @@
       </div>
 
 	  <div id="iconContainer">
-		<div id="refreshIcon" class="paperIcon">
+		<a href="#" onclick="setup()"><div id="refreshIcon" class="paperIcon">
 		  <img src="img/refresh.png" width="50px" style="margin-left:15px;margin-top:20px;"/>
-		</div>
+		</div></a>
 		<br/><br/>
 
-		<div id="facebookIcon" class="paperIcon">
+		<a id="fblink" href="#"><div id="facebookIcon" class="paperIcon">
 		  <img src="img/FB-f-Logo__blue_50.png" width="40px" style="margin-left:20px;margin-top:22px;"/>
-		</div>
+		</div></a>
 
 		<br/><br/><br/><br/><br/><br/><br/>
 		<br/><br/><br/><br/><br/><br/><br/>
@@ -62,8 +65,8 @@
 	  </div>
 
 	  <div id="wintoast"><center>
-		  <h1> WINNAR IS U</h1></br>
-		  You scraped it in <strong><span id="yourTime"></span></strong>
+		  <h1>WELL DONE.</h1></br>
+		  You scraped that site in <strong><span id="yourTime"></span></strong>.
 	  </center></div>
 
 	  <div id="tape1" class="frame"></div>
