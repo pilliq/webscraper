@@ -17,6 +17,13 @@ var h;
 var cvs_left;
 var cvs_top;
 
+// animation things
+var requestAnimationFrame = window.requestAnimationFrame ||
+                            window.mozRequestAnimationFrame ||
+                            window.webkitRequestAnimationFrame ||
+                            window.msRequestAnimationFrame;
+var animq = []; // animation queue
+
 // draw a polygon
 var drawPolygon = function(polygon, context) {
     context.beginPath();
@@ -49,12 +56,97 @@ function allowScrapes() {
     recentlyScraped = -1;
 }
 
+var clone = function (p,c) {
+    var c = c || {};
+    for (var i in p) {
+        if (typeof p[i] === 'object') {
+            c[i] = (p[i].constructor === Array)?[]:{};
+            clone(p[i],c[i]);
+        } else {
+            c[i] = p[i];
+        }
+    }
+    return c;
+}
+
+var translatePolygon = function(polygon, x, y) {
+    for (var i = 0; i < polygon.points.length; i++) {
+        polygon.points[i].x += x;
+        polygon.points[i].y += y;
+    }
+};
+
+var minX = function(polygon) {
+    var min = {x: polygon.points[0].x, y: polygon.points[0].y};
+    for (var i = 0; i < polygon.points.length; i++) {
+        if (polygon.points[i].x < min.x) {
+            min.x = polygon.points[i].x;
+            min.y = polygon.points[i].y;
+        }
+    }   
+    return min;
+};
+
+var minY = function(polygon) {
+    var min = {x: polygon.points[0].x, y: polygon.points[0].y};
+    for (var i = 0; i < polygon.points.length; i++) {
+        if (polygon.points[i].y < min.y) {
+            min.x = polygon.points[i].x;
+            min.y = polygon.points[i].y;
+        }
+    }   
+    return min;
+};
+
+var offCanvas = function(polygon) {
+    var miny = minY(polygon);
+    if (miny.y > h) return true;
+
+    var minx = minX(polygon);
+    if (minx.x > w) return true;
+
+    return false;
+};
+
 /* The main game "loop", called wheneverthe mouse is moved
 */
 function gameMouseMove(evt) {
     function inPoly(x,y,p){
         return isPointInPoly(p.points, {x:x, y:y});
     }
+
+    var update = function(polygon) { // updates position of polygon for animation
+        translatePolygon(polygon, 0, polygon.speed); // fall straight down
+        foreground_ctx.fillStyle = "#00FF00";
+        drawPolygon(polygon, foreground_ctx);
+        foreground_ctx.fill();
+    };
+
+    var draw = function() {
+        foreground_ctx.clearRect(0, 0, w, h);
+        for (var i = 0; i < animq.length; i++) {
+            update(animq[i]);
+            if (offCanvas(animq[i])) {
+                animq.splice(i,1); 
+                i--;
+            } 
+        }
+        console.log(animq.length);
+
+        if (animq.length != 0) {
+            requestAnimationFrame(draw);
+        }
+    }
+
+    var eject = function(polygon) { // push onto the queue for ejection
+        var animpoly = clone(polygon);
+        animpoly.speed = .2 + Math.random() * 3; //random speed
+        animq.push(animpoly);
+        if (animq.length == 1) { // first one, start the animation!
+            draw();
+        }
+    };
+
     if (game_over) return;
     mX = evt.pageX - cvs_left;
     mY = evt.pageY - cvs_top;
@@ -64,6 +156,7 @@ function gameMouseMove(evt) {
                && !polygons[i].scraped && recentlyScraped == -1  ){
                 //scrape!!
                 polygons[i].scraped = true;
+                eject(polygons[i]); // start animation for this polygon
                 num_scraped++;
                 recentlyScraped = i;
 
@@ -75,6 +168,7 @@ function gameMouseMove(evt) {
                     var plusone = crumble(i);
                     if (plusone != -1) {
                         polygons[plusone].scraped = true;
+                        eject(polygons[i]); // start animation for this polygon
                         num_scraped++;
                         redraw(middleground_ctx);
                     }
