@@ -23,6 +23,8 @@
 </head>
 
 <body onload="setup();">
+
+  <div id="allBlackDiv"></div>
   <div id="pageBackground">
 
 	<div class="container" id="topContainer">
@@ -59,7 +61,7 @@
 		<br/><br/><br/><br/><br/><br/><br/>
 
 		<div id="infoIcon" class="paperIcon">
-		  <img src="img/info.png" width="60px" style="margin-left:10px;margin-top:14px;"/>
+		  <a href="#" onclick="openInfo();return false;"><img src="img/info.png" width="60px" style="margin-left:10px;margin-top:14px;"/></a>
 		</div>
 
 	  </div>
@@ -77,6 +79,27 @@
     </div>
 
     <div id="timer"></div>
+	<div id="aboutDiv">
+
+	  <b>The Game:</b><br/>
+	  We, the makers of Webscraper, are delighted to give you 
+	  the joy of thoughtless paint-scraping without its real-world 
+	  complications (not to mention the mess).  
+	  We wrote this for the <a href="http://hacknjill.com/blog/">Hack'n Jill</a> Build n' Play in 2013.<br/><br/>
+
+	  <b>The Testimonials:</b><br/>
+	  "I used to be afraid of the internet, but now I've found a home online" <i>-- Russ Goddleson, Paint Scraper</i><br/>
+ 	  "More fun than watching paint dry" <i>-- anonymous user</i><br/><br/>
+
+	  <b>The team:</b><br/>
+	  
+	  Phillip Quiza<br/>
+	  Amalia Hawkins<br/>
+	  Kyle Erf<br/>
+	  Samantha Ritter<br/><br/>
+
+	  <a href="#" onclick="closeInfo();return false;">close</a><br/>
+	</div>
 	
   </div>
   

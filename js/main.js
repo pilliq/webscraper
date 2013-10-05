@@ -367,6 +367,20 @@ function fillMiddleground(ctx) {
     imageObj.src = wallpaint_imgs[Math.floor((Math.random()*wallpaint_imgs.length))];
 };
 
+// opens the info div and black
+function openInfo() {
+	console.log("open");
+	$('#allBlackDiv').css('visibility', 'visible');
+	$('#aboutDiv').css('visibility', 'visible');
+}
+
+// closes the info div and black
+function closeInfo() {
+	console.log("close");
+	$('#allBlackDiv').css('visibility', 'hidden');
+	$('#aboutDiv').css('visibility', 'hidden');
+}
+
 // contains the functionality for crumbling nearby polygons
 // in a domino effect.
 // when called, finds an unscraped polygon sharing a border point

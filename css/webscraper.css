@@ -154,3 +154,16 @@ h1 {
         -1px 1px 0 #ffffff,
         1px 1px 0 #ffffff;
 }
+
+#aboutDiv {
+		  padding:30px;
+		  position:absolute;
+		  visibility:hidden;
+		  top: 200px;
+		  width:400px;
+		  left:350px;
+		  z-index:11;
+		  background-image:url('../img/oldpaper.jpg');
+		  box-shadow: 0 0 30px #000000;
+		  }
+
