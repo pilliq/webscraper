@@ -46,7 +46,6 @@ function isPointInPoly(poly, pt){
 /* The main game "loop", called wheneverthe mouse is moved
 */
 function gameMouseMove(evt) {
-
     function inPoly(x,y,p){
         return isPointInPoly(p.points, {x:x, y:y});
     }
@@ -59,6 +58,7 @@ function gameMouseMove(evt) {
                polygons[i].scraped = true;
                redraw(middleground_ctx);
                recentlyScraped = true;
+               play_sound();
         }
     }
 }
