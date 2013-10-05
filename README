@@ -1,8 +1,11 @@
-polygon data:
+webscraper:
+===
+the joy of thoughtless paint-scraping without the real-world complications (not to mention the mess)
+written for the hack'n jill build n' play october 4-5 2013
 
-{ 
-    polygon: {
-        points: [ {x: 43, y: 21}, {x: 67, y: 56}, {x: 100, y: 12} ],
-        scraped: false
-    }
-}
+written by:
+===
+samantha ritter
+kyle erf
+phillip quiza
+amalia hawkins
