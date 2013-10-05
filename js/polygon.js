@@ -24,12 +24,9 @@ function drawPoly(polygon) {
 };
 
 // a stupid test function
-function testPolygons() {
+function setupPolygons(w, h) {
 	var poly = {};
 	var pts = [];
-
-	var w = 600;
-	var h = 400;
 
 	// bottom points
 	for (var i = 0; i < w; i += 50) {
@@ -61,9 +58,6 @@ function testPolygons() {
 function crackle(polygon, reps) {
 	var points = polygon["points"];
 
-	console.log(reps);
-	console.log(points);
-
 	// base case?
 	if (reps == 0 || points.length < 4) {
 
@@ -77,7 +71,7 @@ function crackle(polygon, reps) {
 		polygons.push(poly);
 
 		// draw here for testing
-		drawPoly(poly);
+		//drawPoly(poly);
 
 		return;
 	}
@@ -118,11 +112,8 @@ function crackle(polygon, reps) {
 	
 	// IMPORTANT: must 'cycle' the points around some
 	// so same first point doesn't get picked every time
-	console.log("cycling:");
-	console.log(poly1_pts);
 	poly1_pts = cycleArray(poly1_pts);
 	poly2_pts = cycleArray(poly2_pts);
-	console.log(poly1_pts);
 
 	var poly1 = {};
 	var poly2 = {};
@@ -183,8 +174,6 @@ function crookedLine(pt1, pt2, poly) {
 		}
 		crookedPoints.push(new_pt);
 	}
-	console.log("crooked points:");
-	console.log(crookedPoints);
 	return crookedPoints;
 };
 
@@ -257,8 +246,6 @@ function primePoints(x1, y1, x2, y2) {
 		prev_y = new_y;
 		t = t + step;
 	}
-	console.log("primes:");
-	console.log(primes);
 	return primes;
 };
 

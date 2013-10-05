@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Webscraper</title>
+
+  <!-- CSS /-->
+  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="css/webscraper.css" rel="stylesheet"/>
+
+  <!-- import JS files /-->
+  <script src="bootstrap/js/bootstrap.min.js"></script>
+
+  <!-- local JS files /-->
+  <script src="js/polygon.js" type="text/javascript"></script>
+  <script src="js/main.js" type="text/javascript"></script>
+  <script src="js/jquery.min.js" type="text/javascript"></script>
+
+</head>
+
+<body onload="setup();">
+  <div id="pageBackground"></div>
+
+	<div class="container">
+	  <div class="row">
+		<div class="span12">
+		  
+		  <div id="viewport" width="800">
+			<canvas class="canvas" id="background" height="700" width="800"></canvas>
+			<canvas class="canvas" id="middleground" height="700" width="800"></canvas>
+			<canvas class="canvas" id="foreground" height="700" width="800"></canvas>
+			<canvas class="canvas" id="gradient" height="700" width="800"></canvas>
+			<canvas class="canvas" id="cursor" height="700" width="800"></canvas>
+		  </div>
+		  
+		</div>
+	  </div>
+	</div>
+	
+  </div>
+
+</body>
+
+
+</html>

@@ -1,0 +1,45 @@
+/* css! */
+
+#viewport { position: relative; }
+            
+canvas {
+	   background-color: transparent;																				
+       }
+
+.canvas {
+       position: absolute;
+       }
+
+body {
+	 background-image:url('../img/rooms/room2.jpg');
+}
+
+#backgroundImage {
+				 position: fixed;
+				 z-index: 1;
+				 width: 1400;
+				 height: 1400;
+				 background-color: #ffe9e9;
+				 }
+
+#background {
+                z-index: 2;
+				background-image:url('../img/walls/wall0.jpg');
+            }
+
+#middleground {
+                z-index: 3;
+            }
+
+#foreground {
+                z-index: 4;
+            }
+
+#gradient {
+		  z-index: 5;
+}
+
+#cursor {
+		z-index: 6;
+		cursor: none;
+}
