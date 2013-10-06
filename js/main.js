@@ -433,15 +433,7 @@ function fillMiddleground(ctx) {
     };
 
     // randomly choose paint texture.
-	var num = 14; // change only this when adding more
-
-    var wallpaint_imgs = ["img/paint/paint0.jpg", "img/paint/paint1.jpg", 
-                          "img/paint/paint3.jpg", "img/paint/paint4.jpg",
-                          "img/paint/paint5.jpg", "img/paint/paint6.jpg",
-                          "img/paint/paint7.jpg", "img/paint/paint8.jpg",
-						  "img/paint/paint9.jpg", "img/paint/paint10.jpg",
-						  "img/paint/paint11.jpg", "img/paint/paint12.jpg",
-						  "img/paint/paint13.jpg"]
+	var num = 17; // change only this when adding more
 
     imageObj.src = "img/paint/paint" + Math.floor((Math.random() * num)) + ".jpg";
 };
