@@ -433,7 +433,7 @@ function fillMiddleground(ctx) {
     };
 
     // randomly choose paint texture.
-	var num = 17; // change only this when adding more
+	var num = 33; // change only this when adding more textures
 
     imageObj.src = "img/paint/paint" + Math.floor((Math.random() * num)) + ".jpg";
 };
