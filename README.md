@@ -6,6 +6,9 @@ Play it [here](http://kyleerf.com/webscraper/)
 
 # Written by
 samantha ritter
+
 kyle erf
+
 phillip quiza
+
 amalia hawkins
