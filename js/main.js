@@ -10,7 +10,8 @@ var middleground_shadow_ctx;
 var middleground_ctx;
 var foreground_ctx;
 var cursor_ctx;
-var imageObj;
+var cursorClickImage;
+var cursorHoverImage;
 var backgroundImage;
 
 // global canvas w and h
@@ -37,8 +38,6 @@ var addMouseHistory = function(point) {
     mouseTrail.push(point);
 
 };
-
-
 
 // draw a polygon
 var drawPolygon = function(polygon, context) {
@@ -240,6 +239,11 @@ function gameMouseMove(evt) {
         }
     };
 
+	if (!leftButtonDown) {
+		drawScraperHover(evt);
+	}
+	else drawScraperClick(evt);
+
     if (game_over) return;
     mX = evt.pageX - cvs_left;
     mY = evt.pageY - cvs_top;
@@ -328,7 +332,10 @@ function setup() {
     $(document).mousedown(function(e){
         e.originalEvent.preventDefault();
         // Left mouse button was pressed, set flag
-        if(e.which === 1) leftButtonDown = true;
+        if(e.which === 1) {
+			leftButtonDown = true;
+			drawScraperClick(e);
+		}
     });
     $(document).mouseup(function(e){
         // Left mouse button was released, clear flag
@@ -345,9 +352,11 @@ function setup() {
     cursor_ctx = cursor.getContext("2d");
     var gradient_ctx = gradient.getContext("2d");	
 
-    // load cursor image asset.
-    imageObj = new Image();
-    imageObj.src = "img/scraper3.png";
+    // load cursor images
+    cursorHoverImage = new Image();
+    cursorHoverImage.src = "img/scraper_hover.png";
+    cursorClickImage = new Image();
+    cursorClickImage.src = "img/scraper_click.png";
 
     var stars = new Image();
     stars.onload = function() {
@@ -382,9 +391,8 @@ function setup() {
     //remove random piece
     polygons[Math.floor(Math.random() * polygons.length)].scraped = true;
 
-    // set cursor
+    // set cursor: this triggers the game loop
     $('#cursor').mousemove( function(e) {
-        drawScraper(e);
         gameMouseMove(e);
     });
 
@@ -416,9 +424,14 @@ function redraw(ctx) {
     }
 }
 
-function drawScraper(e) {
+function drawScraperHover(e) {
     cursor_ctx.clearRect(0, 0, w, h);
-    cursor_ctx.drawImage(imageObj, e.pageX - cvs_left - 70, e.pageY - cvs_top - 20);
+    cursor_ctx.drawImage(cursorHoverImage, e.pageX - cvs_left - 70, e.pageY - cvs_top - 20);
+};
+
+function drawScraperClick(e) {
+    cursor_ctx.clearRect(0, 0, w, h);
+    cursor_ctx.drawImage(cursorClickImage, e.pageX - cvs_left - 70, e.pageY - cvs_top - 20);
 };
 
 function fillMiddleground(ctx) {
