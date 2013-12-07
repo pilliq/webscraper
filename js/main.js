@@ -213,7 +213,9 @@ function gameMouseMove(evt) {
     var calcCurrentTrajectory = function() {
         var p1 = mouseTrail[mouseTrail.length-2];
         var p2 = mouseTrail[mouseTrail.length-1];
-        return {x: p2.x-p1.x, y: p2.y-p1.y};
+        var x = p2.x-p1.x
+        var y = p2.y-p1.y
+        return {x: x, y: (y == 0) ? -1 : y};
     };
 
     var eject = function(polygon) { // push onto the queue for animating
