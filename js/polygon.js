@@ -60,16 +60,10 @@ function setupPolygons(w, h) {
 // reps is the number of times to recurse
 function crackle(polygon, reps) {
     var points = polygon["points"];
-
-    // if shape is too small, do not keep it.
     area = polygonArea(points, points.length);
 
-    if (area < 400) {
-	return;
-    }
-
     // base case
-    else if (reps == 0 || points.length < 4 || area < 800) {
+    if (reps == 0 || points.length < 4 || area < 400 || tooThin(points)) {
 
 	// store polygon properly and return
 	var poly = {};
@@ -210,6 +204,26 @@ function polygonArea(poly, numPoints)
       j = i;  //j is previous vertex to i
     }
   return -area/2;
+}
+
+function tooThin(points) {
+    width = maxWidth(points);
+    area = polygonArea(points, points.length);
+    return ((area/width) < 70);
+}
+
+// find the distance between the two farthest-apart points and return indices.
+function maxWidth(points) {
+    maxDistance = 0;
+    for (var i = 0; i < (points.length - 1); i++) {
+	for (var j = i + 1; j < points.length; j++) {
+	    dist = distanceFormula(points[i].x, points[i].y, points[j].x, points[j].y);
+	    if (dist > maxDistance) {
+		maxDistance = dist;
+	    }
+	}
+    }
+    return maxDistance;
 }
 
 function cycleArray(array) {
