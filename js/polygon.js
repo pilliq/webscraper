@@ -25,26 +25,29 @@ function drawPoly(polygon) {
 
 // a stupid test function
 function setupPolygons(w, h) {
-	var poly = {};
-	var pts = [];
+    var poly = {};
+    var pts = [];
+    
+    // randomize starting points, a bit
+    var step = (Math.floor(Math.random()*5) + 3)*10
 
 	// bottom points
-	for (var i = 0; i < w; i += 50) {
+	for (var i = 0; i < w; i += step) {
 		pts.push({"x" : i, "y" : 0});
 	}
 
 	// right side points
-	for (var i = 0; i < h; i += 50) {
+	for (var i = 0; i < h; i += step) {
 		pts.push({"x" : w, "y" : i});
 	}
 
 	// top points
-	for (var i = w; i > 0; i -= 50) {
+	for (var i = w; i > 0; i -= step) {
 		pts.push({"x" : i, "y" : h});
 	}
 
 	// left side points
-	for (var i = h; i > 0; i -= 50) {
+	for (var i = h; i > 0; i -= step) {
 		pts.push({"x" : 0, "y" : i});
 	}
 	polygons = [];
@@ -54,31 +57,38 @@ function setupPolygons(w, h) {
 
 // takes an array of coordinates, representing a polygon
 // last point should NOT be repeat of first point.
-// n is the number of times to recurse
+// reps is the number of times to recurse
 function crackle(polygon, reps) {
-	var points = polygon["points"];
+    var points = polygon["points"];
 
-	// base case?
-	if (reps == 0 || points.length < 4) {
+    // if shape is too small, do not keep it.
+    area = polygonArea(points, points.length);
 
-		// store polygon properly and return
-		var poly = {};
-		var poly_pts = [];
-		for (var i = 0; i < points.length; i++) {
-			poly_pts.push(points[i]);
-		}
-		poly["points"] = poly_pts;
-		poly["scraped"] = false;
-		polygons.push(poly);
+    if (area < 400) {
+	return;
+    }
 
-		// draw here for testing
-		//	drawPoly(poly);
-		return;
+    // base case
+    else if (reps == 0 || points.length < 4 || area < 800) {
+
+	// store polygon properly and return
+	var poly = {};
+	var poly_pts = [];
+	for (var i = 0; i < points.length; i++) {
+	    poly_pts.push(points[i]);
+	}
+	poly["points"] = poly_pts;
+	poly["scraped"] = false;
+	polygons.push(poly);
+	
+	// draw here for testing
+	//	drawPoly(poly);
+	return;
 	}
 
 	// divide polygon and return
 	var n = points.length;
-	var mid = Math.floor(n/2 + Math.random()*4);
+	var mid = Math.floor(n/3 + Math.random()*10);
 	if (mid >= n) mid = n - 1;
 
 	// are these two points in line with each other?
@@ -96,6 +106,8 @@ function crackle(polygon, reps) {
 			mid = 0;
 		}
 	}
+
+    console.log("recursing");
 
 	// divide into two "halves"
 	// both polygons get first and mid point
@@ -186,6 +198,19 @@ function isPointInPoly(poly, pt){
         && (c = !c);
     return c;
 };
+
+//@ http://www.mathopenref.com/coordpolygonarea2.html
+function polygonArea(poly, numPoints) 
+{ 
+  area = 0;         // Accumulates area in the loop
+  j = numPoints-1;  // The last vertex is the 'previous' one to the first
+
+  for (i=0; i<numPoints; i++)
+    { area = area +  (poly[j].x + poly[i].x) * (poly[j].y - poly[i].y); 
+      j = i;  //j is previous vertex to i
+    }
+  return -area/2;
+}
 
 function cycleArray(array) {
 	new_array = [];
